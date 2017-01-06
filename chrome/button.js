@@ -20,18 +20,27 @@ WebRTCPermissionsButtons = {
 
 		var thisButtonValue = toolbarbutton.classList.contains("setting-true");
 		var actualValue = prefs.getBoolPref("disabled");
+		var message = null;
 		if (!thisButtonValue) {
 			toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (On)";
 			toolbarbutton.classList.add("setting-true");
 			prefs.setBoolPref("disabled", true);
 			if (thisButtonValue == actualValue)
-				alert("Automatic WebRTC connection has been turned on (permissions dialog disabled).\nYou might need to refresh the current page.");
+				message = ("Automatic WebRTC connection has been turned on (permissions dialog disabled).\nYou might need to refresh the current page.");
 		} else {
 			toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (Off)";
 			toolbarbutton.classList.remove("setting-true");
 			prefs.setBoolPref("disabled", false);
 			if (thisButtonValue == actualValue)
-				alert("Automatic WebRTC connection has been turned off (permissions dialog enabled).");
+				message = ("Automatic WebRTC connection has been turned off (permissions dialog enabled).");
+		}
+		
+		try {
+			Components.classes['@mozilla.org/alerts-service;1']
+					.getService(Components.interfaces.nsIAlertsService)
+					.showAlertNotification(null, "WebRTC Permissions UI Toggle", message, false, '', null);
+		} catch(e) {
+			alert(message);
 		}
 	}
 }
