@@ -14,7 +14,9 @@
     em:version="1.0"
     em:homepageURL="https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle"
 
-    em:iconURL="chrome://webrtc-permissions-ui-toggle/content/icon.png" >
+    em:iconURL="chrome://webrtc-permissions-ui-toggle/content/icon.png"
+	em:optionsURL="chrome://webrtc-permissions-ui-toggle/content/options.xul"
+	em:optionsType="2" >
 
     <em:targetApplication>
 	  <!-- Firefox -->
