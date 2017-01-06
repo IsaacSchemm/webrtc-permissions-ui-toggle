@@ -7,7 +7,7 @@
     about="urn:mozilla:install-manifest"
 
     em:name="WebRTC Permissions UI Toggle"
-    em:description="A toolbar button to disable the WebRTC permissions dialog and allow media capture automatically"
+    em:description="A toolbar button to disable the WebRTC permissions dialog and allow media capture automatically."
     em:creator="Isaac Schemm"
 
     em:id="webrtc-permissions-ui-toggle@lakora.us"
