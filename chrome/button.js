@@ -8,17 +8,30 @@ var observerObj = null;
 this.addEventListener("load", () => {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
-	
+
 	observerObj = {
 		observe: function (aSubject, aTopic, aData) {
 			console.log(arguments);
 			if ("nsPref:changed" == aTopic) {
 				let newValue = aSubject.getBoolPref(aData);
 				toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto " + (newValue ? "(On)" : "(Off)");
-				if (newValue)
+
+				let message = "";
+				if (newValue) {
 					toolbarbutton.classList.add("setting-true");
-				else
+					message = ("Automatic WebRTC connection has been turned on (permissions dialog disabled).\nYou might need to refresh the current page.");
+				} else {
 					toolbarbutton.classList.remove("setting-true");
+					message = ("Automatic WebRTC connection has been turned off (permissions dialog enabled).");
+				}
+
+				try {
+					Components.classes['@mozilla.org/alerts-service;1']
+							.getService(Components.interfaces.nsIAlertsService)
+							.showAlertNotification(null, "WebRTC Permissions UI Toggle", message, false, '', null);
+				} catch(e) {
+					alert(message);
+				}
 			}
 		}
 	};
@@ -26,8 +39,12 @@ this.addEventListener("load", () => {
 	prefs.addObserver("", observerObj, false);
 
 	var value = prefs.getBoolPref("disabled");
-	toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto " + (value ? "(On)" : "(Off)");
-	if (value) toolbarbutton.classList.add("setting-true");
+	if (value) {
+		prefs.setBoolPref("disabled", false);
+		message = "Automatic WebRTC connection has been turned off (permissions dialog enabled).";
+	} else {
+		toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (Off)";
+	}
 });
 this.addEventListener("unload", () => {
 	prefs.removeObserver("", observerObj);
@@ -36,21 +53,6 @@ this.addEventListener("unload", () => {
 WebRTCPermissionsButtons = {
 	TogglePermissionsUI: function (toolbarbutton) {
 		var actualValue = prefs.getBoolPref("disabled");
-		var message = null;
-		if (actualValue == false) {
-			prefs.setBoolPref("disabled", true);
-			message = ("Automatic WebRTC connection has been turned on (permissions dialog disabled).\nYou might need to refresh the current page.");
-		} else {
-			prefs.setBoolPref("disabled", false);
-			message = ("Automatic WebRTC connection has been turned off (permissions dialog enabled).");
-		}
-		
-		try {
-			Components.classes['@mozilla.org/alerts-service;1']
-					.getService(Components.interfaces.nsIAlertsService)
-					.showAlertNotification(null, "WebRTC Permissions UI Toggle", message, false, '', null);
-		} catch(e) {
-			alert(message);
-		}
+		prefs.setBoolPref("disabled", !actualValue);
 	}
 }
