@@ -19,11 +19,11 @@ this.addEventListener("load", function () {
 				if (newValue) {
 					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (On)";
 					toolbarbutton.classList.add("setting-true");
-					message = "Automatic WebRTC connection has been turned on (permissions dialog overridden).\nYou might need to refresh the current page.";
+					message = "Automatic WebRTC connection has been turned on. Make sure to turn it off when you're done!\nYou might need to refresh the current page.";
 				} else {
 					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (Off)";
 					toolbarbutton.classList.remove("setting-true");
-					message = "Automatic WebRTC connection has been turned off (permissions dialog re-enabled).";
+					message = "Automatic WebRTC connection has been turned off.";
 				}
 
 				var type = Components.classes["@mozilla.org/preferences-service;1"]
@@ -81,6 +81,12 @@ this.addEventListener("unload", function () {
 WebRTCPermissionsButtons = {
 	TogglePermissionsUI: function (toolbarbutton) {
 		var actualValue = prefs.getBoolPref("disabled");
-		prefs.setBoolPref("disabled", !actualValue);
+		if (actualValue) {
+			prefs.setBoolPref("disabled", false);
+		} else if (confirm(`Only use this feature with sites you trust. Sharing can allow deceptive sites to browse as you and steal your private data.
+Are you sure you want to share your camera, microphone, and screen with all open web sites?
+`)) {
+			prefs.setBoolPref("disabled", true);
+		}
 	}
 }

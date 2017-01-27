@@ -11,21 +11,12 @@
     em:creator="Isaac Schemm"
 
     em:id="webrtc-permissions-ui-toggle@lakora.us"
-    em:version="1.0"
+    em:version="1.0.1"
     em:homepageURL="https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle"
 
     em:iconURL="chrome://webrtc-permissions-ui-toggle/content/icon.png"
 	em:optionsURL="chrome://webrtc-permissions-ui-toggle/content/options.xul"
 	em:optionsType="2" >
-
-    <em:targetApplication>
-	  <!-- Firefox -->
-	  <Description>
-		<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-		<em:minVersion>49.0</em:minVersion>
-		<em:maxVersion>*</em:maxVersion>
-	  </Description>
-	</em:targetApplication>
 
     <em:targetApplication>
 	  <!-- SeaMonkey -->
@@ -35,12 +26,6 @@
 		<em:maxVersion>2.*</em:maxVersion>
 	  </Description>
 	</em:targetApplication>
-
-    <em:file>
-      <Description
-        about="urn:mozilla:extension:webrtc-permissions-ui-toggle"
-        em:package="content/webrtc-permissions-ui-toggle/" />
-    </em:file>
 
   </Description>
 
