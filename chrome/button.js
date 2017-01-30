@@ -4,6 +4,7 @@
 
 var prefs = null;
 var observerObj = null;
+var title = "WebRTC Permissions UI Toggle";
 
 this.addEventListener("load", function () {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
@@ -17,11 +18,11 @@ this.addEventListener("load", function () {
 
 				var message = "";
 				if (newValue) {
-					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (On)";
+					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (On)";
 					toolbarbutton.classList.add("setting-true");
 					message = "Automatic WebRTC connection has been turned on. Make sure to turn it off when you're done!\nYou might need to refresh the current page.";
 				} else {
-					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (Off)";
+					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (Off)";
 					toolbarbutton.classList.remove("setting-true");
 					message = "Automatic WebRTC connection has been turned off.";
 				}
@@ -35,20 +36,24 @@ this.addEventListener("load", function () {
 						try {
 							Components.classes['@mozilla.org/alerts-service;1']
 									.getService(Components.interfaces.nsIAlertsService)
-									.showAlertNotification(null, "WebRTC Permissions UI Toggle", message, false, '', null);
+									.showAlertNotification(null, title, message, false, '', null);
 						} catch (e) {
-							alert(message);
+							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+									.getService(Components.interfaces.nsIPromptService)
+									.alert(thisWindow, title, message);
 						}
 						break;
 					case "none":
 						break;
 					default:
 						try {
-							alert(message);
+							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+									.getService(Components.interfaces.nsIPromptService)
+									.alert(thisWindow, title, message);
 						} catch (e) {
 							Components.classes['@mozilla.org/alerts-service;1']
 										.getService(Components.interfaces.nsIAlertsService)
-										.showAlertNotification(null, "WebRTC Permissions UI Toggle", message, false, '', null);
+										.showAlertNotification(null, title, message, false, '', null);
 						}
 						break;
 				}
@@ -60,7 +65,7 @@ this.addEventListener("load", function () {
 
 	var value = prefs.getBoolPref("disabled");
 	if (value) {
-		toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (On)";
+		toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (On)";
 		toolbarbutton.classList.add("setting-true");
 		
 		var r = Components.classes["@mozilla.org/preferences-service;1"]
@@ -71,7 +76,7 @@ this.addEventListener("load", function () {
 			prefs.setBoolPref("disabled", false);
 		}
 	} else {
-		toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Auto (Off)";
+		toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (Off)";
 	}
 });
 this.addEventListener("unload", function () {
@@ -79,11 +84,14 @@ this.addEventListener("unload", function () {
 });
 
 WebRTCPermissionsButtons = {
-	TogglePermissionsUI: function (toolbarbutton) {
+	TogglePermissionsUI: toolbarbutton => {
+		var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+			.getService(Components.interfaces.nsIPromptService);
+
 		var actualValue = prefs.getBoolPref("disabled");
 		if (actualValue) {
 			prefs.setBoolPref("disabled", false);
-		} else if (confirm(`Only use this feature with sites you trust. Sharing can allow deceptive sites to browse as you and steal your private data.
+		} else if (promptService.confirm(this.window, title, `Only use this feature with sites you trust. Sharing can allow deceptive sites to browse as you and steal your private data.
 Are you sure you want to share your camera, microphone, and screen with all open web sites?
 `)) {
 			prefs.setBoolPref("disabled", true);
