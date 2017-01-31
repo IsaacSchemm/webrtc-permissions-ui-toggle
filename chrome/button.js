@@ -10,6 +10,18 @@ this.addEventListener("load", function () {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
 	var thisWindow = this;
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
+	
+	Components.classes["@mozilla.org/observer-service;1"]
+		.getService(Components.interfaces.nsIObserverService)
+		.addObserver({
+		observe: function (aSubject, aTopic, aData) {
+			if (aData == "shutdown") {
+				if (prefs) {
+					prefs.setBoolPref("disabled", false);
+				}
+			}
+		}
+	}, "quit-application", false);
 
 	observerObj = {
 		observe: function (aSubject, aTopic, aData) {
