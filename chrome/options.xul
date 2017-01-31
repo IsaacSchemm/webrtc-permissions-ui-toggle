@@ -7,5 +7,5 @@
     <radio value="none" label="None"/>
   </radiogroup>
 </setting>
-<setting pref="extensions.webrtc-permissions-ui-toggle.reset-on-new-window" type="bool" title="Remove permissions override when opening a new browser window (recommended)"/>
+<setting pref="extensions.webrtc-permissions-ui-toggle.reset-on-new-window" type="bool" title="Remove permissions override when opening a new browser window"/>
 </vbox>
