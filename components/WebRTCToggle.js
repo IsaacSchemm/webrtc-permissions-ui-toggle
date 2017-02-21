@@ -47,8 +47,10 @@ WebRTCToggle.prototype = {
 
 	// add to category manager
 	_xpcom_categories: [{category: "profile-after-change"}],
+	
+	prefBranch: null,
 
-	observe: function(aSubject, aTopic, aData) 
+	observe: function(aSubject, aTopic, aData)
 	{
 		switch (aTopic) 
 		{
@@ -58,10 +60,10 @@ WebRTCToggle.prototype = {
 					.getService(Components.interfaces.nsIObserverService)
 					.addObserver(this, "quit-application", false);
 						
-				Components.classes["@mozilla.org/preferences-service;1"]
+				this.prefBranch = Components.classes["@mozilla.org/preferences-service;1"]
 					.getService(Components.interfaces.nsIPrefService)
-					.getBranch("media.navigator.permission.")
-					.addObserver("", this, false);
+					.getBranch("media.navigator.permission.");
+				this.prefBranch.addObserver("", this, false);
 				break;
 			case "quit-application":
 				// Turn the override off when closing the application,
@@ -86,6 +88,7 @@ WebRTCToggle.prototype = {
 				} else {
 					message = "Automatic WebRTC connection has been turned off.";
 				}
+				console.log(message);
 
 				var type = Components.classes["@mozilla.org/preferences-service;1"]
 					.getService(Components.interfaces.nsIPrefService)
