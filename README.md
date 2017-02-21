@@ -14,9 +14,9 @@ that's open will be able to get access to your microphone, camera, and screen!
 So be sure to only turn it on when you need to use WebRTC, and turn it off
 once you're done with it.
 
-Closing the entire application, or uninstalling the extension, will always
-turn off the override. If you want, you can also have it turn off whenever a
-new browser window is opened.
+Closing the entire application, or disabling or removing the extension, will
+always turn off the override. If you want, you can also have it turn off
+whenever a new browser window is opened.
 
 Instructions
 ------------
@@ -46,10 +46,6 @@ Known Bugs
 * If toggling the override is configured to trigger a standard notification
 (the default), and you have windows open that were launched from JavaScript,
 the notification may appear outside of the top edge of the monitor.
-* If toggling the override is configured to trigger a modal dialog, and you
-have multiple windows open, multiple notification dialogs will be displayed.
-* If the override is on, closing SeaMonkey with File > Exit or Ctrl+Q may not
-turn it off.
 
 Notes
 -----
