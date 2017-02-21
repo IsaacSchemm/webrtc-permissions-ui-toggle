@@ -66,7 +66,10 @@ WebRTCToggle.prototype = {
 				break;
             case "nsPref:changed":
 				var title = "WebRTC Permissions UI Toggle";
-				var newValue = aSubject.getBoolPref(aData);
+				var newValue = Components.classes["@mozilla.org/preferences-service;1"]
+					.getService(Components.interfaces.nsIPrefService)
+					.getBranch("media.navigator.permission.")
+					.getBoolPref(aData);
 				
 				var message = "";
 				if (newValue) {
