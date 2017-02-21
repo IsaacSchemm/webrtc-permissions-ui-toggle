@@ -69,14 +69,7 @@ var WebRTCUpdateCall = {
 		Components.classes["@mozilla.org/preferences-service;1"]
 			.getService(Components.interfaces.nsIPrefService)
 			.getBranch("media.navigator.permission.")
-			.addObserver("", WebRTCUpdateCall, false);
-			
-			setInterval(() => {
-				
-		Components.classes['@mozilla.org/alerts-service;1']
-			.getService(Components.interfaces.nsIAlertsService)
-			.showAlertNotification(null, "test", "initialized", false, '', null);
-			}, 1000);
+			.addObserver("", this, false);
     }
 };
 
