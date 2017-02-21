@@ -70,24 +70,13 @@ var WebRTCUpdateCall = {
 			.getService(Components.interfaces.nsIPrefService)
 			.getBranch("media.navigator.permission.")
 			.addObserver("", WebRTCUpdateCall, false);
-		
-		AddonManager.addAddonListener({
-			onDisabled(addon) {
-				if (addon.id == "webrtc-permissions-ui-toggle@lakora.us") {
-					Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-						.getService(Components.interfaces.nsIPromptService)
-						.alert(null, "test", addon.id + " " + addon.pendingOperations);
-				}
-			},
 			
-			onUninstalled(addon) {
-				if (addon.id == "webrtc-permissions-ui-toggle@lakora.us") {
-					Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-						.getService(Components.interfaces.nsIPromptService)
-						.alert(null, "test", addon.id + " " + addon.pendingOperations);
-				}
-			}
-		});
+			setInterval(() => {
+				
+		Components.classes['@mozilla.org/alerts-service;1']
+			.getService(Components.interfaces.nsIAlertsService)
+			.showAlertNotification(null, "test", "initialized", false, '', null);
+			}, 1000);
     }
 };
 
