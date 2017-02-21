@@ -3,6 +3,12 @@ var WebRTCUpdateCall = {
     {
         switch(aTopic)
         {
+			case "quit-application":
+				Components.classes["@mozilla.org/preferences-service;1"]
+					.getService(Components.interfaces.nsIPrefService)
+					.getBranch("media.navigator.permission.")
+					.setBoolPref("disabled", false);
+				break;
             case "nsPref:changed":
 				var title = "WebRTC Permissions UI Toggle";
 				var newValue = aSubject.getBoolPref(aData);
@@ -55,16 +61,7 @@ var WebRTCUpdateCall = {
     {
 		Components.classes["@mozilla.org/observer-service;1"]
 			.getService(Components.interfaces.nsIObserverService)
-			.addObserver({
-			observe: function (aSubject, aTopic, aData) {
-				if (aData == "shutdown") {
-					Components.classes["@mozilla.org/preferences-service;1"]
-						.getService(Components.interfaces.nsIPrefService)
-						.getBranch("media.navigator.permission.")
-						.setBoolPref("disabled", false);
-				}
-			}
-		}, "quit-application", false);
+			.addObserver(this, "quit-application", false);
 				
 		Components.classes["@mozilla.org/preferences-service;1"]
 			.getService(Components.interfaces.nsIPrefService)
