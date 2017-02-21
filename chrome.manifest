@@ -1,3 +1,7 @@
+component {265ba61d-8b89-4739-acc6-24df0bf7eb70} components/WebRTCToggle.js
+contract @webrtctoggle/startup;1 {265ba61d-8b89-4739-acc6-24df0bf7eb70}
+category profile-after-change WebRTCToggle @webrtctoggle/startup;1
+
 content webrtc-permissions-ui-toggle chrome/
 style chrome://global/content/customizeToolbar.xul chrome://webrtc-permissions-ui-toggle/content/button.css
 
