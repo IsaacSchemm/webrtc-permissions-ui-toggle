@@ -6,6 +6,27 @@ var prefs = null;
 var observerObj = null;
 var title = "WebRTC Permissions UI Toggle";
 
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+
+AddonManager.addAddonListener({
+	onUninstalling: function(addon) {
+		if (addon.id == "webrtc-permissions-ui-toggle@lakora.us") {
+			Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService)
+				.getBranch("media.navigator.permission.")
+				.setBoolPref("disabled", false);
+		}
+	},
+	onDisabling: function(addon) {
+		if (addon.id == "webrtc-permissions-ui-toggle@lakora.us") {
+			Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService)
+				.getBranch("media.navigator.permission.")
+				.setBoolPref("disabled", false);
+		}
+	}
+});
+
 this.addEventListener("load", function () {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
 	var thisWindow = this;
@@ -97,16 +118,22 @@ this.addEventListener("unload", function () {
 
 WebRTCPermissionsButtons = {
 	TogglePermissionsUI: toolbarbutton => {
-		var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-			.getService(Components.interfaces.nsIPromptService);
-
-		var actualValue = prefs.getBoolPref("disabled");
-		if (actualValue) {
-			prefs.setBoolPref("disabled", false);
-		} else if (promptService.confirm(this.window, title, `Only use this feature with sites you trust. Sharing can allow deceptive sites to browse as you and steal your private data.
+		AddonManager.getAddonByID("webrtc-permissions-ui-toggle@lakora.us", addon => {
+			var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+				.getService(Components.interfaces.nsIPromptService);
+				
+			if (addon.pendingOperations & (AddonManager.PENDING_DISABLE | AddonManager.PENDING_UNINSTALL)) {
+				promptService.alert(this.window, title, "To use this extension, you must enable or reinstall it.");
+			} else {
+				var actualValue = prefs.getBoolPref("disabled");
+				if (actualValue) {
+					prefs.setBoolPref("disabled", false);
+				} else if (promptService.confirm(this.window, title, `Only use this feature with sites you trust. Sharing can allow deceptive sites to browse as you and steal your private data.
 Are you sure you want to share your camera, microphone, and screen with all open web sites?
 `)) {
-			prefs.setBoolPref("disabled", true);
-		}
+					prefs.setBoolPref("disabled", true);
+				}
+			}
+		});
 	}
 }
