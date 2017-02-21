@@ -4,6 +4,7 @@ XPCOM
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
+Components.utils.import("resource://gre/modules/Console.jsm");
 
 // When the user decides to disable or uninstall the add-on, turn the override
 // off immediately, instead of waiting for application shutdown. In button.js
