@@ -1,76 +1,3 @@
-var WebRTCUpdateCall = {
-	observe: function(aSubject, aTopic, aData)
-    {
-        switch(aTopic)
-        {
-			case "quit-application":
-				Components.classes["@mozilla.org/preferences-service;1"]
-					.getService(Components.interfaces.nsIPrefService)
-					.getBranch("media.navigator.permission.")
-					.setBoolPref("disabled", false);
-				break;
-            case "nsPref:changed":
-				var title = "WebRTC Permissions UI Toggle";
-				var newValue = aSubject.getBoolPref(aData);
-				
-				var message = "";
-				if (newValue) {
-					message = "Automatic WebRTC connection has been turned on. Make sure to turn it off when you're done!\nYou might need to refresh the current page.";
-				} else {
-					message = "Automatic WebRTC connection has been turned off.";
-				}
-
-				var type = Components.classes["@mozilla.org/preferences-service;1"]
-					.getService(Components.interfaces.nsIPrefService)
-					.getBranch("extensions.webrtc-permissions-ui-toggle.")
-					.getCharPref("notify-type");
-				switch (type) {
-					case "non-modal":
-						try {
-							Components.classes['@mozilla.org/alerts-service;1']
-								.getService(Components.interfaces.nsIAlertsService)
-								.showAlertNotification(null, title, message, false, '', null);
-						} catch (e) {
-							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-								.getService(Components.interfaces.nsIPromptService)
-								.alert(null, title, message);
-						}
-						break;
-					case "none":
-						break;
-					default:
-						try {
-							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-								.getService(Components.interfaces.nsIPromptService)
-								.alert(null, title, message);
-						} catch (e) {
-							Components.classes['@mozilla.org/alerts-service;1']
-								.getService(Components.interfaces.nsIAlertsService)
-								.showAlertNotification(null, title, message, false, '', null);
-						}
-						break;
-				}
-                break;
-
-            default:
-                throw Components.Exception("Unknown topic: " + aTopic);
-        }
-    },
-
-    init: function()
-    {
-		Components.classes["@mozilla.org/observer-service;1"]
-			.getService(Components.interfaces.nsIObserverService)
-			.addObserver(this, "quit-application", false);
-				
-		Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService)
-			.getBranch("media.navigator.permission.")
-			.addObserver("", this, false);
-    }
-};
-
-
 /***********************************************************
 XPCOM
 ***********************************************************/
@@ -122,7 +49,62 @@ WebRTCToggle.prototype = {
         switch (aTopic) 
         {
             case "profile-after-change":
-                WebRTCUpdateCall.init();
+                Components.classes["@mozilla.org/observer-service;1"]
+					.getService(Components.interfaces.nsIObserverService)
+					.addObserver(this, "quit-application", false);
+						
+				Components.classes["@mozilla.org/preferences-service;1"]
+					.getService(Components.interfaces.nsIPrefService)
+					.getBranch("media.navigator.permission.")
+					.addObserver("", this, false);
+                break;
+			case "quit-application":
+				Components.classes["@mozilla.org/preferences-service;1"]
+					.getService(Components.interfaces.nsIPrefService)
+					.getBranch("media.navigator.permission.")
+					.setBoolPref("disabled", false);
+				break;
+            case "nsPref:changed":
+				var title = "WebRTC Permissions UI Toggle";
+				var newValue = aSubject.getBoolPref(aData);
+				
+				var message = "";
+				if (newValue) {
+					message = "Automatic WebRTC connection has been turned on. Make sure to turn it off when you're done!\nYou might need to refresh the current page.";
+				} else {
+					message = "Automatic WebRTC connection has been turned off.";
+				}
+
+				var type = Components.classes["@mozilla.org/preferences-service;1"]
+					.getService(Components.interfaces.nsIPrefService)
+					.getBranch("extensions.webrtc-permissions-ui-toggle.")
+					.getCharPref("notify-type");
+				switch (type) {
+					case "non-modal":
+						try {
+							Components.classes['@mozilla.org/alerts-service;1']
+								.getService(Components.interfaces.nsIAlertsService)
+								.showAlertNotification(null, title, message, false, '', null);
+						} catch (e) {
+							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+								.getService(Components.interfaces.nsIPromptService)
+								.alert(null, title, message);
+						}
+						break;
+					case "none":
+						break;
+					default:
+						try {
+							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+								.getService(Components.interfaces.nsIPromptService)
+								.alert(null, title, message);
+						} catch (e) {
+							Components.classes['@mozilla.org/alerts-service;1']
+								.getService(Components.interfaces.nsIAlertsService)
+								.showAlertNotification(null, title, message, false, '', null);
+						}
+						break;
+				}
                 break;
             default:
                 throw Components.Exception("Unknown topic: " + aTopic);
