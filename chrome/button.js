@@ -8,66 +8,19 @@ var title = "WebRTC Permissions UI Toggle";
 
 this.addEventListener("load", function () {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
-	var thisWindow = this;
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
-	
-	Components.classes["@mozilla.org/observer-service;1"]
-		.getService(Components.interfaces.nsIObserverService)
-		.addObserver({
-		observe: function (aSubject, aTopic, aData) {
-			if (aData == "shutdown") {
-				if (prefs) {
-					prefs.setBoolPref("disabled", false);
-				}
-			}
-		}
-	}, "quit-application", false);
 
 	observerObj = {
 		observe: function (aSubject, aTopic, aData) {
 			if ("nsPref:changed" == aTopic) {
 				var newValue = aSubject.getBoolPref(aData);
 
-				var message = "";
 				if (newValue) {
 					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (On)";
 					toolbarbutton.classList.add("setting-true");
-					message = "Automatic WebRTC connection has been turned on. Make sure to turn it off when you're done!\nYou might need to refresh the current page.";
 				} else {
 					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (Off)";
 					toolbarbutton.classList.remove("setting-true");
-					message = "Automatic WebRTC connection has been turned off.";
-				}
-
-				var type = Components.classes["@mozilla.org/preferences-service;1"]
-					.getService(Components.interfaces.nsIPrefService)
-					.getBranch("extensions.webrtc-permissions-ui-toggle.")
-					.getCharPref("notify-type");
-				switch (type) {
-					case "non-modal":
-						try {
-							Components.classes['@mozilla.org/alerts-service;1']
-									.getService(Components.interfaces.nsIAlertsService)
-									.showAlertNotification(null, title, message, false, '', null);
-						} catch (e) {
-							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-									.getService(Components.interfaces.nsIPromptService)
-									.alert(thisWindow, title, message);
-						}
-						break;
-					case "none":
-						break;
-					default:
-						try {
-							Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-									.getService(Components.interfaces.nsIPromptService)
-									.alert(thisWindow, title, message);
-						} catch (e) {
-							Components.classes['@mozilla.org/alerts-service;1']
-										.getService(Components.interfaces.nsIAlertsService)
-										.showAlertNotification(null, title, message, false, '', null);
-						}
-						break;
 				}
 			}
 		}
