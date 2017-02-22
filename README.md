@@ -23,7 +23,7 @@ Instructions
 
 1. Install the extension. You can download it from the SeaMonkey Add-ons site
 (https://addons.mozilla.org/en-US/seamonkey/addon/webrtc-permissions-ui-toggle)
-or check the Releases section here on GitHub for the most recent .xpi file.
+or check the [Releases](https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle/releases) section here on GitHub for the most recent .xpi file.
 After you install the extension, you will need to restart SeaMonkey.
 
 2. Add the WebRTC Override button to the toolbar. Right-click on an empty area
