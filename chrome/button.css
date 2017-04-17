@@ -2,19 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#webrtc-permissions-ui-toggle-1,
-#wrapper-webrtc-permissions-ui-toggle-1
-  {list-style-image: url("chrome://webrtc-permissions-ui-toggle/content/button-1.png");}
+.webrtc-permissions-ui-button
+{
+	list-style-image: url("chrome://webrtc-permissions-ui-toggle/content/icon.png");
+	-moz-image-region: rect(0px 48px 48px 0px);
+}
+.webrtc-permissions-ui-button.setting-true image {
+	list-style-image: url("chrome://webrtc-permissions-ui-toggle/content/icon-override.png");
+}
 
-/* common style for all custom buttons */
-.webrtc-permissions-ui-button                  
-  {-moz-image-region: rect( 0px 24px 24px  0px);}
-
-.webrtc-permissions-ui-button.setting-true
-  {-moz-image-region: rect(24px 24px 48px  0px);}
-
-[iconsize="small"] .webrtc-permissions-ui-button
-  {-moz-image-region: rect( 0px 40px 16px 24px);}
-
-[iconsize="small"] .webrtc-permissions-ui-button.setting-true
-  {-moz-image-region: rect(24px 40px 40px 24px);}
+.webrtc-permissions-ui-button image {
+	width: 24px;
+	height: 24px;
+}
+[iconsize="small"] .webrtc-permissions-ui-button image {
+	width: 16px;
+	height: 16px;
+}
