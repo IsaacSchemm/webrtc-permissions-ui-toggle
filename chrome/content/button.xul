@@ -27,9 +27,22 @@
   class="webrtc-permissions-ui-button chromeclass-toolbar-additional"
   />
 
+<!-- SeaMonkey -->
 <menupopup id="taskPopup">
   <menuitem 
     id="webRTCOverrideToolsMenuToggle"
+    label="&menuItem.label;" 
+    accesskey="&menuItem.accesskey;" 
+    type="checkbox"
+	autocheck="false"
+    oncommand="WebRTCPermissionsButtons.TogglePermissionsUI()" />
+</menupopup>
+
+<!-- Firefox -->
+<menupopup id="menu_ToolsPopup">
+  <menuitem 
+    id="webRTCOverrideToolsMenuToggle"
+    insertafter="devToolsSeparator" 
     label="&menuItem.label;" 
     accesskey="&menuItem.accesskey;" 
     type="checkbox"
