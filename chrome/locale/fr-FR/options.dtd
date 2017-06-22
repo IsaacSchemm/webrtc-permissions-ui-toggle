@@ -1,0 +1,6 @@
+<!ENTITY showInMenu.label          "Montrer l'élément au menu Outils">
+<!ENTITY notifyType.label          "Type de notification quand (des)activé">
+<!ENTITY notifyType.nonModal.label "Notification ordinaire">
+<!ENTITY notifyType.alert.label    "Fenêtre modale">
+<!ENTITY notifyType.none.label     "Pas de notification">
+<!ENTITY resetOnNewWindow.label    "Desactiver la connexion automatique de WebRTC quand une nouvelle fenêtre du navigateur est ouvert">

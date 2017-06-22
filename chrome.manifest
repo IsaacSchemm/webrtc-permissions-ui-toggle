@@ -6,6 +6,7 @@ content webrtc-permissions-ui-toggle chrome/content/
 style chrome://global/content/customizeToolbar.xul chrome://webrtc-permissions-ui-toggle/content/button.css
 
 locale webrtc-permissions-ui-toggle en-US chrome/locale/en-US/
+locale webrtc-permissions-ui-toggle fr-FR chrome/locale/fr-FR/
 
 # Firefox
 overlay	chrome://browser/content/browser.xul chrome://webrtc-permissions-ui-toggle/content/button.xul
