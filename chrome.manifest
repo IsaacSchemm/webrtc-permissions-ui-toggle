@@ -2,8 +2,10 @@ component {265ba61d-8b89-4739-acc6-24df0bf7eb70} components/WebRTCToggle.js
 contract @webrtctoggle/startup;1 {265ba61d-8b89-4739-acc6-24df0bf7eb70}
 category profile-after-change WebRTCToggle @webrtctoggle/startup;1
 
-content webrtc-permissions-ui-toggle chrome/
+content webrtc-permissions-ui-toggle chrome/content/
 style chrome://global/content/customizeToolbar.xul chrome://webrtc-permissions-ui-toggle/content/button.css
+
+locale webrtc-permissions-ui-toggle en-US chrome/locale/en-US/
 
 # Firefox
 overlay	chrome://browser/content/browser.xul chrome://webrtc-permissions-ui-toggle/content/button.xul

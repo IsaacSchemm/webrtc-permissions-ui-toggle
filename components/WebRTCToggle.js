@@ -49,6 +49,18 @@ WebRTCToggle.prototype = {
 	_xpcom_categories: [{category: "profile-after-change"}],
 	
 	prefBranch: null,
+	
+	getString: s => {
+		var strings = Components.classes["@mozilla.org/intl/stringbundle;1"]
+			.getService(Components.interfaces.nsIStringBundleService)
+			.createBundle("chrome://webrtc-permissions-ui-toggle/locale/webrtc-permissions-ui-toggle.properties");
+		try {
+			return strings.GetStringFromName(s);
+		} catch (e) {
+			if ("console" in window) window.console.log(e);
+			return "?";
+		}
+	},
 
 	observe: function(aSubject, aTopic, aData)
 	{
@@ -75,19 +87,18 @@ WebRTCToggle.prototype = {
 					.setBoolPref("disabled", false);
 				break;
 			case "nsPref:changed":
+				var strings = Components.classes["@mozilla.org/intl/stringbundle;1"]
+					.getService(Components.interfaces.nsIStringBundleService)
+					.createBundle("chrome://webrtc-permissions-ui-toggle/locale/webrtc-permissions-ui-toggle.properties");
+					
 				// Determine which message to show to the user.
-				var title = "WebRTC Permissions UI Toggle";
+				var title = strings.GetStringFromName("title");
 				var newValue = Components.classes["@mozilla.org/preferences-service;1"]
 					.getService(Components.interfaces.nsIPrefService)
 					.getBranch("media.navigator.permission.")
 					.getBoolPref(aData);
 				
-				var message = "";
-				if (newValue) {
-					message = "Automatic WebRTC connection has been turned on. Make sure to turn it off when you're done!\nYou might need to refresh the current page.";
-				} else {
-					message = "Automatic WebRTC connection has been turned off.";
-				}
+				var message = strings.GetStringFromName(newValue ? "turnedOn" : "turnedOff");
 				console.log(message);
 
 				var type = Components.classes["@mozilla.org/preferences-service;1"]
