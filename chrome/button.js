@@ -9,6 +9,7 @@ var title = "WebRTC Permissions UI Toggle";
 this.addEventListener("load", function () {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
+	var menuItem = document.getElementById("webRTCOverrideToolsMenuToggle");
 
 	observerObj = {
 		observe: function (aSubject, aTopic, aData) {
@@ -18,9 +19,11 @@ this.addEventListener("load", function () {
 				if (newValue) {
 					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (On)";
 					toolbarbutton.classList.add("setting-true");
+					menuItem.setAttribute("checked", true);
 				} else {
 					toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (Off)";
 					toolbarbutton.classList.remove("setting-true");
+					menuItem.setAttribute("checked", false);
 				}
 			}
 		}
@@ -49,7 +52,7 @@ this.addEventListener("unload", function () {
 });
 
 WebRTCPermissionsButtons = {
-	TogglePermissionsUI: toolbarbutton => {
+	TogglePermissionsUI: () => {
 		AddonManager.getAddonByID("webrtc-permissions-ui-toggle@lakora.us", addon => {
 			var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
 				.getService(Components.interfaces.nsIPromptService);

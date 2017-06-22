@@ -23,8 +23,18 @@
 <toolbarbutton id="webrtc-permissions-ui-toggle-1"
   label="WebRTC Override"
   tooltiptext="WebRTC Override"
-  oncommand="WebRTCPermissionsButtons.TogglePermissionsUI(this)"
+  oncommand="WebRTCPermissionsButtons.TogglePermissionsUI()"
   class="webrtc-permissions-ui-button chromeclass-toolbar-additional"
   />
+
+<menupopup id="taskPopup">
+  <menuitem 
+    id="webRTCOverrideToolsMenuToggle"
+    label="WebRTC Override" 
+    accesskey="R" 
+    type="checkbox"
+	autocheck="false"
+    oncommand="WebRTCPermissionsButtons.TogglePermissionsUI()" />
+</menupopup>
 
 </overlay>
