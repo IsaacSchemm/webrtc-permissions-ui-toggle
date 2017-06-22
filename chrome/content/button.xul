@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/css"
   href="chrome://webrtc-permissions-ui-toggle/content/button.css"?>
 
-<!DOCTYPE overlay >
+<!DOCTYPE overlay SYSTEM "chrome://webrtc-permissions-ui-toggle/locale/button.dtd">
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
@@ -21,8 +21,8 @@
 
 <!-- button details -->
 <toolbarbutton id="webrtc-permissions-ui-toggle-1"
-  label="WebRTC Override"
-  tooltiptext="WebRTC Override"
+  label="&menuItem.label;"
+  tooltiptext="&menuItem.label;"
   oncommand="WebRTCPermissionsButtons.TogglePermissionsUI()"
   class="webrtc-permissions-ui-button chromeclass-toolbar-additional"
   />
@@ -30,8 +30,8 @@
 <menupopup id="taskPopup">
   <menuitem 
     id="webRTCOverrideToolsMenuToggle"
-    label="WebRTC Override" 
-    accesskey="R" 
+    label="&menuItem.label;" 
+    accesskey="&menuItem.accesskey;" 
     type="checkbox"
 	autocheck="false"
     oncommand="WebRTCPermissionsButtons.TogglePermissionsUI()" />

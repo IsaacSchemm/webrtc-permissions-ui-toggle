@@ -1,0 +1,6 @@
+<!ENTITY showInMenu.label          "Show item in Tools menu (new windows only)">
+<!ENTITY notifyType.label          "Type of notification when toggled">
+<!ENTITY notifyType.nonModal.label "Standard notification">
+<!ENTITY notifyType.alert.label    "Modal dialog">
+<!ENTITY notifyType.none.label     "None">
+<!ENTITY resetOnNewWindow.label    "Remove permissions override when opening a new browser window">

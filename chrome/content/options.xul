@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
+<!DOCTYPE webrtc-permissions-ui-toggle-prefs SYSTEM "chrome://webrtc-permissions-ui-toggle/locale/options.dtd">
 <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <setting pref="extensions.webrtc-permissions-ui-toggle.show-in-menu" type="bool" title="Show item in Tools menu (new windows only)"/>
-  <setting pref="extensions.webrtc-permissions-ui-toggle.notify-type" type="radio" title="Type of notification when toggled">
+  <setting pref="extensions.webrtc-permissions-ui-toggle.show-in-menu" type="bool" title="&showInMenu.label;"/>
+  <setting pref="extensions.webrtc-permissions-ui-toggle.notify-type" type="radio" title="&notifyType.label;">
   <radiogroup>
-    <radio value="non-modal" label="Standard notification"/>
-    <radio value="alert" label="Modal dialog"/>
-    <radio value="none" label="None"/>
+    <radio value="non-modal" label="&notifyType.nonModal.label;"/>
+    <radio value="alert" label="&notifyType.alert.label;"/>
+    <radio value="none" label="&notifyType.none.label;"/>
   </radiogroup>
 </setting>
-<setting pref="extensions.webrtc-permissions-ui-toggle.reset-on-new-window" type="bool" title="Remove permissions override when opening a new browser window"/>
+<setting pref="extensions.webrtc-permissions-ui-toggle.reset-on-new-window" type="bool" title="&resetOnNewWindow.label;"/>
 </vbox>
