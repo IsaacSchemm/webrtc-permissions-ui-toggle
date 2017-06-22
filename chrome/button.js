@@ -10,6 +10,12 @@ this.addEventListener("load", function () {
 	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
 	var menuItem = document.getElementById("webRTCOverrideToolsMenuToggle");
+	
+	var showInMenu = Components.classes["@mozilla.org/preferences-service;1"]
+		.getService(Components.interfaces.nsIPrefService)
+		.getBranch("extensions.webrtc-permissions-ui-toggle.")
+		.getBoolPref("show-in-menu");
+	if (!showInMenu) menuItem.hidden = true;
 
 	observerObj = {
 		observe: function (aSubject, aTopic, aData) {
@@ -35,6 +41,7 @@ this.addEventListener("load", function () {
 	if (value) {
 		toolbarbutton.label = toolbarbutton.tooltipText = "WebRTC Override (On)";
 		toolbarbutton.classList.add("setting-true");
+		menuItem.setAttribute("checked", true);
 		
 		var r = Components.classes["@mozilla.org/preferences-service;1"]
 					.getService(Components.interfaces.nsIPrefService)

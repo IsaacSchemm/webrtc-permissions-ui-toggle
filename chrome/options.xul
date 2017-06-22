@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <setting pref="extensions.webrtc-permissions-ui-toggle.show-in-menu" type="bool" title="Show item in Tools menu (new windows only)"/>
   <setting pref="extensions.webrtc-permissions-ui-toggle.notify-type" type="radio" title="Type of notification when toggled">
   <radiogroup>
     <radio value="non-modal" label="Standard notification"/>
