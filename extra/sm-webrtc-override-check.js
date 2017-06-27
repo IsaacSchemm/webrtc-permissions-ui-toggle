@@ -9,7 +9,6 @@
 */
 
 if (/SeaMonkey/.test(navigator.userAgent)) {
-    var urlbase = "https://cdnjs.cloudflare.com/ajax/libs/basicModal/3.3.8/basicModal.min";
     window.addEventListener("load", function () {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
 
@@ -25,57 +24,59 @@ if (/SeaMonkey/.test(navigator.userAgent)) {
             if (webRTCSuccess) return;
 
             // WebRTC request was not accepted; show message
-            var scriptLoad, styleLoad;
+            var cover = document.createElement("div");
+            cover.id = "sm-webrtc-override-check";
+            var cover_s = cover.style;
+            cover_s.position = "absolute";
+            cover_s.width = cover_s.height = "100%";
+            cover_s.left = cover_s.top = "0";
+            cover_s.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            cover_s.display = "flex";
+            cover_s.alignItems = cover_s.justifyContent = "center";
+            document.body.appendChild(cover);
 
-            if (!("basicModal" in window)) {
-                var head = document.head || document.getElementsByTagName("head")[0];
-                scriptLoad = new Promise(function (resolve, reject) {
-                    var s = document.createElement('script');
-                    s.src = urlbase + ".js";
-                    s.onload = resolve;
-                    s.onerror = reject;
-                    head.appendChild(s);
-                });
-                styleLoad = new Promise(function (resolve, reject) {
-                    var l = document.createElement('link');
-                    l.rel = "stylesheet";
-                    l.href = urlbase + ".css";
-                    l.onload = resolve;
-                    l.onerror = reject;
-                    head.appendChild(l);
-                });
+            var box = document.createElement("div");
+            var box_s = box.style;
+            box_s.maxWidth = "500px";
+            box_s.padding = "25px";
+            box_s.backgroundColor = "white";
+            box_s.color = "black";
+            box_s.borderRadius = "5px";
+            cover.appendChild(box);
+
+            box.innerHTML = "To use WebRTC in SeaMonkey, install <a href='https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle#readme'>WebRTC Permissions UI Toggle</a>, toggle it on, and reload this page; or try another browser, such as Firefox or Chrome.";
+
+            var ignore_p = document.createElement("p");
+            ignore_p.align = "center";
+            ignore_p.style.marginBottom = "0";
+            box.appendChild(ignore_p);
+
+            var ignore = document.createElement("button");
+            ignore.innerHTML = "Ignore";
+            ignore.style.minWidth = "100px";
+            ignore_p.appendChild(ignore);
+
+            function close(mediaStream) {
+                webRTCSuccess = true;
+				if (mediaStream) {
+					// We don't need this stream, so close it.
+					mediaStream.getAudioTracks().forEach(function (t) {
+						t.stop();
+					});
+                }
+                document.body.removeChild(cover);
             }
 
-            Promise.all([scriptLoad, styleLoad]).then(function (resolve, reject) {
-                function close(mediaStream) {
-                    webRTCSuccess = true;
-                    basicModal.close();
-					if (mediaStream) {
-						// We don't need this stream, so close it.
-						mediaStream.getAudioTracks().forEach(function (t) {
-							t.stop();
-						});
-					}
-                }
+            ignore.addEventListener("click", function () {
+                close();
+            });
 
-                // Show the dialog
-                basicModal.show({
-                    body: "To use WebRTC in SeaMonkey, install <a href='https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle#readme'>WebRTC Permissions UI Toggle</a>, toggle it on, and reload this page; or try another browser, such as Firefox or Chrome.",
-                    buttons: {
-                        action: {
-                            title: "Ignore",
-                            fn: close
-                        }
-                    }
-                });
-
-                // Retry WebRTC every time the mouse cursor leaves and re-enters the window
-                document.body.addEventListener("mouseenter", function () {
-                    if (webRTCSuccess) return;
-                    setTimeout(function () {
-                        navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(close);
-                    }, 0);
-                });
+            // Retry WebRTC every time the mouse cursor leaves and re-enters the window
+            document.body.addEventListener("mouseenter", function () {
+                if (webRTCSuccess) return;
+                setTimeout(function () {
+                    navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(close);
+                }, 0);
             });
         }, 1000);
     });
