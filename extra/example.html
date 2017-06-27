@@ -4,8 +4,15 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>WebRTC Check Example</title>
     <script src="sm-webrtc-override-check.js"></script>
+	<script>
+		function check() {
+			var s = document.createElement("script");
+			s.src = "sm-webrtc-override-check.js";
+			document.head.appendChild(s);
+		}
+	</script>
   </head>
   <body>
-    <br>
+    <button onclick="check();">Check again</button>
   </body>
 </html>
