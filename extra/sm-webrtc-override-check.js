@@ -46,7 +46,7 @@ if (/SeaMonkey/.test(navigator.userAgent)) {
 				box_s.borderRadius = "5px";
 				cover.appendChild(box);
 
-				box.innerHTML = "To use WebRTC in SeaMonkey, install <a href='https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle#readme'>WebRTC Permissions UI Toggle</a>, toggle it on, and reload this page; or try another browser, such as Firefox or Chrome.";
+				box.innerHTML = "To use WebRTC in SeaMonkey, install <a target='_blank' href='https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle#readme'>WebRTC Permissions UI Toggle</a>, toggle it on, and reload this page; or try another browser, such as Firefox or Chrome.";
 
 				var ignore_p = document.createElement("p");
 				ignore_p.align = "center";
