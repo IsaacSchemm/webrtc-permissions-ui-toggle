@@ -34,6 +34,7 @@ if (/SeaMonkey/.test(navigator.userAgent)) {
 				cover_s.backgroundColor = "rgba(0, 0, 0, 0.5)";
 				cover_s.display = "flex";
 				cover_s.alignItems = cover_s.justifyContent = "center";
+				cover_s.zIndex = "1000";
 				document.body.appendChild(cover);
 
 				var box = document.createElement("div");
