@@ -1,5 +1,5 @@
 ﻿/* SeaMonkey WebRTC override check.
-  Last updated: June 26, 2017
+  Last updated: June 27, 2017
   https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle
 
   If the user is running SeaMonkey, this script will make repeated WebRTC
