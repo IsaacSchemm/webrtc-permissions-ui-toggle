@@ -1,6 +1,6 @@
 ﻿/*
   SeaMonkey WebRTC override check.
-  Last updated: June 27, 2017
+  Last updated: June 28, 2017
   https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle
 
   If the user is running SeaMonkey, this script will make repeated WebRTC
@@ -14,16 +14,19 @@ if (/SeaMonkey/.test(navigator.userAgent)) {
 		var check = function () {
 			if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
 
-			var webRTCSuccess = false;
+			var webRTCResolved = false;
 
 			// Initial check
 			navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(function () {
-				webRTCSuccess = true;
+				webRTCResolved = true;
+			}).catch(function () {
+				// e.g. no devices are available
+				webRTCResolved = true;
 			});
 
 			// Wait 1 second
 			setTimeout(function () {
-				if (webRTCSuccess) return;
+				if (webRTCResolved) return;
 
 				// WebRTC request was not accepted; show message
 				var cover = document.createElement("div");
@@ -60,7 +63,7 @@ if (/SeaMonkey/.test(navigator.userAgent)) {
 				ignore_p.appendChild(ignore);
 
 				function close(mediaStream) {
-					webRTCSuccess = true;
+					webRTCResolved = true;
 					if (mediaStream) {
 						// We don't need this stream, so close it.
 						mediaStream.getAudioTracks().forEach(function (t) {
@@ -76,7 +79,7 @@ if (/SeaMonkey/.test(navigator.userAgent)) {
 
 				// Retry WebRTC every time the mouse cursor leaves and re-enters the window
 				document.body.addEventListener("mouseenter", function () {
-					if (webRTCSuccess) return;
+					if (webRTCResolved) return;
 					setTimeout(function () {
 						navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(close);
 					}, 0);

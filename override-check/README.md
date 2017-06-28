@@ -10,6 +10,8 @@ When the user activates the WebRTC override using the extension, this script
 should detect that the request has suceeded and remove the dialog from the
 page. The user can also dismiss the dialog manually with the Ignore button.
 
+If the initial WebRTC request fails immediately, the dialog will not be shown.
+
 This script can be included for all browsers; it won't do anything if the
 browser is not SeaMonkey. You can include it before or after the page has
 loaded.
