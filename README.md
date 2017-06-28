@@ -47,3 +47,5 @@ select a particular camera, mic, screen, or window to share, you'll
 have to use another web browser (like Firefox.)
 
 If the SeaMonkey Add-ons site is down, check the [Releases](https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle/releases) section on GitHub for the most recent .xpi file.
+
+Web developers: if you expect to get visitors using SeaMonkey on your WebRTC app, check out the script in the override-check folder.

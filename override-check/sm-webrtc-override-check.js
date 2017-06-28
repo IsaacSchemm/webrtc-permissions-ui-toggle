@@ -1,4 +1,5 @@
-﻿/* SeaMonkey WebRTC override check.
+﻿/*
+  SeaMonkey WebRTC override check.
   Last updated: June 27, 2017
   https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle
 
