@@ -6,12 +6,11 @@ var prefs = null;
 var observerObj = null;
 
 this.addEventListener("load", function () {
-	prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("media.navigator.permission.");
+	prefs = Services.prefs.getBranch("media.navigator.permission.");
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
 	var menuItem = document.getElementById("webRTCOverrideToolsMenuToggle");
 	
-	var showInMenu = Components.classes["@mozilla.org/preferences-service;1"]
-		.getService(Components.interfaces.nsIPrefService)
+	var showInMenu = Services.prefs
 		.getBranch("extensions.webrtc-permissions-ui-toggle.")
 		.getBoolPref("show-in-menu");
 	if (!showInMenu) menuItem.hidden = true;
@@ -42,8 +41,7 @@ this.addEventListener("load", function () {
 		toolbarbutton.classList.add("setting-true");
 		menuItem.setAttribute("checked", true);
 		
-		var r = Components.classes["@mozilla.org/preferences-service;1"]
-					.getService(Components.interfaces.nsIPrefService)
+		var r = Services.prefs
 					.getBranch("extensions.webrtc-permissions-ui-toggle.")
 					.getBoolPref("reset-on-new-window");
 		if (r) {
@@ -81,8 +79,12 @@ WebRTCPermissionsButtons = {
 				var actualValue = prefs.getBoolPref("disabled");
 				if (actualValue) {
 					prefs.setBoolPref("disabled", false);
+					Services.prefs.getBranch("media.navigator.").clearUserPref("enabled");
+					Services.prefs.getBranch("media.peerconnection.").clearUserPref("enabled");
 				} else if (promptService.confirm(this.window, title, WebRTCPermissionsButtons.GetString("confirmationPromptMessage"))) {
 					prefs.setBoolPref("disabled", true);
+					Services.prefs.getBranch("media.navigator.").setBoolPref("enabled", true);
+					Services.prefs.getBranch("media.peerconnection.").setBoolPref("enabled", true);
 				}
 			}
 		});
