@@ -13,6 +13,10 @@ will be able to get access to your microphone, camera, and screen! So be sure
 to only turn it on when you need to use WebRTC, and turn it off once you're
 done with it.
 
+Some versions of SeaMonkey might ship with WebRTC disabled by default.
+WebRTC Permissions UI Toggle 1.3.0+ will enable WebRTC while toggled on, and
+reset it to its original value when toggled off.
+
 Instructions
 ------------
 
@@ -46,6 +50,8 @@ Your first camera/screen/etc. will be chosen automatically. If you need to
 select a particular camera, mic, screen, or window to share, you'll
 have to use another web browser (like Firefox.)
 
-If the SeaMonkey Add-ons site is down, check the [Releases](https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle/releases) section on GitHub for the most recent .xpi file.
+Sites that use H.264 as a video codec instead of VP8 might not work properly
+in SeaMonkey 2.49.x. This problem is not specific to SeaMonkey; Firefox 52 ESR
+has the same issue.
 
-Web developers: if you expect to get visitors using SeaMonkey on your WebRTC app, check out the script in the override-check folder.
+If the SeaMonkey Add-ons site is down, check the [Releases](https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle/releases) section on GitHub for the most recent .xpi file.
