@@ -2,11 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var prefs = null;
-var observerObj = null;
-
 this.addEventListener("load", function () {
-	prefs = Services.prefs.getBranch("media.navigator.permission.");
+	WebRTCPermissionsButtons.prefs = Services.prefs.getBranch("media.navigator.permission.");
 	var toolbarbutton = document.getElementById("webrtc-permissions-ui-toggle-1");
 	var menuItem = document.getElementById("webRTCOverrideToolsMenuToggle");
 	
@@ -15,7 +12,7 @@ this.addEventListener("load", function () {
 		.getBoolPref("show-in-menu");
 	if (!showInMenu) menuItem.hidden = true;
 
-	observerObj = {
+	WebRTCPermissionsButtons.observerObj = {
 		observe: function (aSubject, aTopic, aData) {
 			if ("nsPref:changed" == aTopic) {
 				var newValue = aSubject.getBoolPref(aData);
@@ -33,9 +30,9 @@ this.addEventListener("load", function () {
 		}
 	};
 	
-	prefs.addObserver("", observerObj, false);
+	WebRTCPermissionsButtons.prefs.addObserver("", WebRTCPermissionsButtons.observerObj, false);
 
-	var value = prefs.getBoolPref("disabled");
+	var value = WebRTCPermissionsButtons.prefs.getBoolPref("disabled");
 	if (value) {
 		toolbarbutton.label = toolbarbutton.tooltipText = WebRTCPermissionsButtons.GetString("overrideOn");
 		toolbarbutton.classList.add("setting-true");
@@ -45,14 +42,14 @@ this.addEventListener("load", function () {
 					.getBranch("extensions.webrtc-permissions-ui-toggle.")
 					.getBoolPref("reset-on-new-window");
 		if (r) {
-			prefs.setBoolPref("disabled", false);
+			WebRTCPermissionsButtons.prefs.setBoolPref("disabled", false);
 		}
 	} else {
 		toolbarbutton.label = toolbarbutton.tooltipText = WebRTCPermissionsButtons.GetString("overrideOff");
 	}
 });
 this.addEventListener("unload", function () {
-	prefs.removeObserver("", observerObj);
+	WebRTCPermissionsButtons.prefs.removeObserver("", WebRTCPermissionsButtons.observerObj);
 });
 
 WebRTCPermissionsButtons = {
@@ -76,13 +73,13 @@ WebRTCPermissionsButtons = {
 			if (addon.pendingOperations & (AddonManager.PENDING_DISABLE | AddonManager.PENDING_UNINSTALL)) {
 				promptService.alert(this.window, title, WebRTCPermissionsButtons.GetString("enableOrReinstallRequired"));
 			} else {
-				var actualValue = prefs.getBoolPref("disabled");
+				var actualValue = WebRTCPermissionsButtons.prefs.getBoolPref("disabled");
 				if (actualValue) {
-					prefs.setBoolPref("disabled", false);
+					WebRTCPermissionsButtons.prefs.setBoolPref("disabled", false);
 					Services.prefs.getBranch("media.navigator.").clearUserPref("enabled");
 					Services.prefs.getBranch("media.peerconnection.").clearUserPref("enabled");
 				} else if (promptService.confirm(this.window, title, WebRTCPermissionsButtons.GetString("confirmationPromptMessage"))) {
-					prefs.setBoolPref("disabled", true);
+					WebRTCPermissionsButtons.prefs.setBoolPref("disabled", true);
 					Services.prefs.getBranch("media.navigator.").setBoolPref("enabled", true);
 					Services.prefs.getBranch("media.peerconnection.").setBoolPref("enabled", true);
 				}
