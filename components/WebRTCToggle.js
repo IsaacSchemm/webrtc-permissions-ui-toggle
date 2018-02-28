@@ -13,18 +13,26 @@ Components.utils.import("resource://gre/modules/Console.jsm");
 AddonManager.addAddonListener({
 	onUninstalling: function(addon) {
 		if (addon.id == "webrtc-permissions-ui-toggle@lakora.us") {
-			Components.classes["@mozilla.org/preferences-service;1"]
-				.getService(Components.interfaces.nsIPrefService)
-				.getBranch("media.navigator.permission.")
+			var svc = Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService);
+			svc.getBranch("media.navigator.permission.")
 				.setBoolPref("disabled", false);
+			svc.getBranch("media.navigator.")
+				.clearUserPref("enabled");
+			svc.getBranch("media.peerconnection.")
+				.clearUserPref("enabled");
 		}
 	},
 	onDisabling: function(addon) {
 		if (addon.id == "webrtc-permissions-ui-toggle@lakora.us") {
-			Components.classes["@mozilla.org/preferences-service;1"]
-				.getService(Components.interfaces.nsIPrefService)
-				.getBranch("media.navigator.permission.")
+			var svc = Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService);
+			svc.getBranch("media.navigator.permission.")
 				.setBoolPref("disabled", false);
+			svc.getBranch("media.navigator.")
+				.clearUserPref("enabled");
+			svc.getBranch("media.peerconnection.")
+				.clearUserPref("enabled");
 		}
 	}
 });
@@ -81,10 +89,14 @@ WebRTCToggle.prototype = {
 				// Turn the override off when closing the application,
 				// regardless of whether or not the add-on is going to be
 				// uninstalled.
-				Components.classes["@mozilla.org/preferences-service;1"]
-					.getService(Components.interfaces.nsIPrefService)
-					.getBranch("media.navigator.permission.")
+				var svc = Components.classes["@mozilla.org/preferences-service;1"]
+					.getService(Components.interfaces.nsIPrefService);
+				svc.getBranch("media.navigator.permission.")
 					.setBoolPref("disabled", false);
+				svc.getBranch("media.navigator.")
+					.clearUserPref("enabled");
+				svc.getBranch("media.peerconnection.")
+					.clearUserPref("enabled");
 				break;
 			case "nsPref:changed":
 				var strings = Components.classes["@mozilla.org/intl/stringbundle;1"]
