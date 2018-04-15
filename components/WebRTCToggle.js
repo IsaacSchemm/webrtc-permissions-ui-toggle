@@ -109,6 +109,14 @@ WebRTCToggle.installOpenH264 = async function () {
 				// Install OpenH264
 				await gmpInstallManager.installAddon(addon);
 				console.log("Installed OpenH264");
+				
+				const win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+					.getService(Components.interfaces.nsIWindowMediator)
+					.getMostRecentWindow('navigator:browser');
+				win.gBrowser.selectedTab = win.gBrowser.addTab("http://www.openh264.org/BINARY_LICENSE.txt");
+				Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+					.getService(Components.interfaces.nsIPromptService)
+					.alert(null, title, strings.GetStringFromName("openH264InstalledMessage"));
 			}
 		}
 	}
