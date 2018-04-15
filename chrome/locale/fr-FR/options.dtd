@@ -4,3 +4,4 @@
 <!ENTITY notifyType.alert.label    "Fenêtre modale">
 <!ENTITY notifyType.none.label     "Pas de notification">
 <!ENTITY resetOnNewWindow.label    "Desactiver la connexion automatique de WebRTC quand une nouvelle fenêtre du navigateur est ouvert">
+<!ENTITY enableOpenH264.label      "Enable OpenH264">

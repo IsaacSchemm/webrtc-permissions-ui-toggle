@@ -10,4 +10,5 @@
   </radiogroup>
 </setting>
 <setting pref="extensions.webrtc-permissions-ui-toggle.reset-on-new-window" type="bool" title="&resetOnNewWindow.label;"/>
+<setting pref="media.gmp-gmpopenh264.enabled" type="bool" title="&enableOpenH264.label;"/>
 </vbox>

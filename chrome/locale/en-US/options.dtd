@@ -4,3 +4,4 @@
 <!ENTITY notifyType.alert.label    "Modal dialog">
 <!ENTITY notifyType.none.label     "None">
 <!ENTITY resetOnNewWindow.label    "Remove permissions override when opening a new browser window">
+<!ENTITY enableOpenH264.label      "Enable OpenH264">

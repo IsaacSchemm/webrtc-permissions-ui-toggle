@@ -5,6 +5,7 @@ XPCOM
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://gre/modules/Console.jsm");
+Components.utils.import("resource://gre/modules/GMPInstallManager.jsm");
 
 // When the user decides to disable or uninstall the add-on, turn the override
 // off immediately, instead of waiting for application shutdown. In button.js
@@ -21,6 +22,10 @@ AddonManager.addAddonListener({
 				.clearUserPref("enabled");
 			svc.getBranch("media.peerconnection.")
 				.clearUserPref("enabled");
+			svc.getBranch("media.gmp-manager.")
+				.clearUserPref("url");
+			svc.getBranch("media.gmp-gmpopenh264.")
+				.clearUserPref("enabled");
 		}
 	},
 	onDisabling: function(addon) {
@@ -33,6 +38,10 @@ AddonManager.addAddonListener({
 				.clearUserPref("enabled");
 			svc.getBranch("media.peerconnection.")
 				.clearUserPref("enabled");
+			svc.getBranch("media.gmp-manager.")
+				.clearUserPref("url");
+			svc.getBranch("media.gmp-gmpopenh264.")
+				.clearUserPref("enabled");
 		}
 	}
 });
@@ -43,6 +52,67 @@ class definition
 
 //class constructor
 function WebRTCToggle() { }
+
+WebRTCToggle.installOpenH264 = async function () {
+	const strings = Components.classes["@mozilla.org/intl/stringbundle;1"]
+		.getService(Components.interfaces.nsIStringBundleService)
+		.createBundle("chrome://webrtc-permissions-ui-toggle/locale/webrtc-permissions-ui-toggle.properties");
+	const title = strings.GetStringFromName("title");
+
+	// Check if OpenH264 is enabled or disabled. If not set, ask the user.
+	let openH264Enabled;
+	const branch = Components.classes["@mozilla.org/preferences-service;1"]
+		.getService(Components.interfaces.nsIPrefService)
+		.getBranch("media.gmp-gmpopenh264.");
+	try {
+		openH264Enabled = branch.getBoolPref("enabled");
+	} catch (e) {
+		const ok = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+			.getService(Components.interfaces.nsIPromptService)
+			.confirm(null, title, strings.GetStringFromName("openH264EnablePromptMessage"));
+		branch.setBoolPref("enabled", ok);
+		openH264Enabled = ok;
+	}
+
+	if (openH264Enabled) {
+		// Fix GMP manager URL: replace SeaMonkey version number with Gecko/Firefox version number.
+		let current_url;
+		try {
+			current_url = Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService)
+				.getBranch("media.gmp-manager.")
+				.getCharPref("url");
+			if (!current_url) throw new Error("media.gmp-manager.url is null or empty");
+		} catch (e) {
+			console.error(e);
+			return;
+		}
+		let new_url = current_url.replace("%VERSION%", "%PLATFORM_VERSION%");
+		if (new_url != current_url) {
+			console.log("Updating media.gmp-manager.url to " + new_url);
+			Components.classes["@mozilla.org/preferences-service;1"]
+				.getService(Components.interfaces.nsIPrefService)
+				.getBranch("media.gmp-manager.")
+				.setCharPref("url", new_url);
+		}
+
+		// Check if OpenH264 is installed.
+		const gmpInstallManager = new GMPInstallManager();
+		const resp = await gmpInstallManager.checkForAddons();
+		const addon = resp.gmpAddons.filter(a => a.id === "gmp-gmpopenh264")[0];
+		console.log(addon && addon.isInstalled);
+		if (addon && !addon.isInstalled) {
+			const ok = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+				.getService(Components.interfaces.nsIPromptService)
+				.confirm(null, title, strings.GetStringFromName("openH264InstallPromptMessage"));
+			if (ok) {
+				// Install OpenH264
+				await gmpInstallManager.installAddon(addon);
+				console.log("Installed OpenH264");
+			}
+		}
+	}
+}
 
 // class definition
 WebRTCToggle.prototype = {
@@ -57,18 +127,6 @@ WebRTCToggle.prototype = {
 	_xpcom_categories: [{category: "profile-after-change"}],
 	
 	prefBranch: null,
-	
-	getString: s => {
-		var strings = Components.classes["@mozilla.org/intl/stringbundle;1"]
-			.getService(Components.interfaces.nsIStringBundleService)
-			.createBundle("chrome://webrtc-permissions-ui-toggle/locale/webrtc-permissions-ui-toggle.properties");
-		try {
-			return strings.GetStringFromName(s);
-		} catch (e) {
-			if ("console" in window) window.console.log(e);
-			return "?";
-		}
-	},
 
 	observe: function(aSubject, aTopic, aData)
 	{
@@ -111,7 +169,6 @@ WebRTCToggle.prototype = {
 					.getBoolPref(aData);
 				
 				var message = strings.GetStringFromName(newValue ? "turnedOn" : "turnedOff");
-				console.log(message);
 
 				var type = Components.classes["@mozilla.org/preferences-service;1"]
 					.getService(Components.interfaces.nsIPrefService)
@@ -147,6 +204,10 @@ WebRTCToggle.prototype = {
 								.showAlertNotification(null, title, message, false, '', null);
 						}
 						break;
+				}
+
+				if (newValue) {
+					WebRTCToggle.installOpenH264().catch(console.error);
 				}
 				break;
 			default:
