@@ -67,11 +67,30 @@ WebRTCToggle.installOpenH264 = async function () {
 	try {
 		openH264Enabled = branch.getBoolPref("enabled");
 	} catch (e) {
-		const ok = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-			.getService(Components.interfaces.nsIPromptService)
-			.confirm(null, title, strings.GetStringFromName("openH264EnablePromptMessage"));
-		branch.setBoolPref("enabled", ok);
-		openH264Enabled = ok;
+		const prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+			.getService(Components.interfaces.nsIPromptService);
+		const buttonIndex = prompts.confirmEx(
+			null,
+			title,
+			strings.GetStringFromName("openH264EnablePromptMessage"),
+			prompts.STD_YES_NO_BUTTONS + prompts.BUTTON_POS_2 * prompts.BUTTON_TITLE_IS_STRING,
+			null,
+			null,
+			strings.GetStringFromName("viewLicense"),
+			null,
+			{});
+		if (buttonIndex == 0) {
+			branch.setBoolPref("enabled", true);
+			openH264Enabled = true;
+		} else if (buttonIndex == 1) {
+			return;
+		} else if (buttonIndex == 2) {
+			const ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
+				.getService(Components.interfaces.nsIWindowWatcher);
+			WebRTCToggle.licenseWindow = ww.openWindow(null, "http://www.openh264.org/BINARY_LICENSE.txt", "OpenH264License", "menubar,modal,width=600,height=400,resizable", null);
+			WebRTCToggle.installOpenH264();
+			return;
+		}
 	}
 
 	if (openH264Enabled) {
@@ -102,22 +121,9 @@ WebRTCToggle.installOpenH264 = async function () {
 		const addon = resp.gmpAddons.filter(a => a.id === "gmp-gmpopenh264")[0];
 		console.log(addon && addon.isInstalled);
 		if (addon && !addon.isInstalled) {
-			const ok = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-				.getService(Components.interfaces.nsIPromptService)
-				.confirm(null, title, strings.GetStringFromName("openH264InstallPromptMessage"));
-			if (ok) {
-				// Install OpenH264
-				await gmpInstallManager.installAddon(addon);
-				console.log("Installed OpenH264");
-				
-				const win = Components.classes['@mozilla.org/appshell/window-mediator;1']
-					.getService(Components.interfaces.nsIWindowMediator)
-					.getMostRecentWindow('navigator:browser');
-				win.gBrowser.selectedTab = win.gBrowser.addTab("http://www.openh264.org/BINARY_LICENSE.txt");
-				Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-					.getService(Components.interfaces.nsIPromptService)
-					.alert(null, title, strings.GetStringFromName("openH264InstalledMessage"));
-			}
+			// Install OpenH264
+			await gmpInstallManager.installAddon(addon);
+			console.log("Installed OpenH264");
 		}
 	}
 }
