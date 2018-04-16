@@ -24,7 +24,9 @@ done with it.
 Instructions
 ------------
 
-1. Install the extension. You can download it from the
+1. Install the extension. You can get the newest version from the
+[releases page](https://github.com/IsaacSchemm/webrtc-permissions-ui-toggle/releases)
+or use the
 [SeaMonkey Add-ons site](https://addons.mozilla.org/en-US/seamonkey/addon/webrtc-permissions-ui-toggle).
 After you install the extension, you will need to restart SeaMonkey.
 
